@@ -15,9 +15,9 @@ PLUGIN_API bool on_sdk_load(plugin_sdk_core* plugin_sdk_good)
 	   case champion_id::Nami:
 		   Nami::load();
 		   return true;
-	   //case champion_id::Karma:
-		  // Lux::load();
-		  // return true;
+	   case champion_id::Karma:
+		   Lux::load();
+		   return true;
 	   default:
 		   break;
 	   }

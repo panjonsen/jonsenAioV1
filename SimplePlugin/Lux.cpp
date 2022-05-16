@@ -55,6 +55,19 @@ namespace Lux {
 		
 	
 	}
+
+
+	namespace e_settings{
+		TreeEntry* e_mode = nullptr;
+		TreeEntry* e_one_yuzhi_checkbox = nullptr;
+		TreeEntry* e_one_yuzhi_slide = nullptr;
+		TreeEntry* e_one_use_kull = nullptr;
+
+
+
+	
+	}
+	
 	void load() {
 
 
@@ -67,16 +80,16 @@ namespace Lux {
 
 		auto e = main_tab->add_tab("e", "E Settings"); 
 		{
-			e->add_combobox("e.mode", "E 模式", { { "模式一" , nullptr }, {"模式二", nullptr } }, 0);
+		 e_settings::e_mode=	e->add_combobox("e.mode", "E 模式", { { "不使用" , nullptr },{ "模式一" , nullptr }, {"模式二", nullptr } }, 0);
 
 
-			e->add_separator("e.e1", "保护模式一(可能受到伤害使用E)");
+		e->add_separator("e.e1", "保护模式一(可能受到伤害使用E)");
 			//伤害阈值开关
-			e->add_checkbox("e.threshold", "~E伤害阈值检查开关", true);
+		e_settings::e_one_yuzhi_checkbox= e->add_checkbox("e.one.yuzhi", "~E伤害阈值检查开关", true);
 			//阈值条
-			e->add_slider("e.threshold.damage", "~伤害大于 X 则使用E", 100,1,500);
+			e_settings::e_one_yuzhi_slide= e->add_slider("e.one.yuzhi.slide", "~伤害大于 X 则使用E", 100,1,1000);
 			//条件护盾  开启后 受到伤害保护撤销
-			e->add_checkbox("e.use", "E Conditional Shield", true);
+			e_settings::e_one_use_kull= e->add_checkbox("e.one.kill", "可能会死使用E", true);
 
 
 			e->add_separator("e.e2", "保护模式二(圆形技能和平A伤害以及平A对象)");
@@ -88,7 +101,7 @@ namespace Lux {
 		}
 
 
-		event_handler<events::on_create_object>::add_callback(on_create_object);
+		//event_handler<events::on_create_object>::add_callback(on_create_object);
 		event_handler<events::on_update>::add_callback(on_update);
 	}
 
