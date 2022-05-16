@@ -2,14 +2,12 @@
 #include "../plugin_sdk/plugin_sdk.hpp"
 #include "fekapepatu.h"
 
-
 namespace Nami {
-
 	namespace q_parm {
 		float range = 875.f;
 		float radius = 100.f;
-		float delay = 0.264;
-		float speed = 0.726;
+		float delay = 1;
+		float speed = FLT_MAX;
 	}
 	namespace w_parm {
 		float range = 725.f;
@@ -105,7 +103,6 @@ namespace Nami {
 	TreeTab* main_tab = nullptr;
 
 	vector jmpDian = vector();
-
 
 	hit_chance get_hitchance(script_spell* spell)
 	{
@@ -305,12 +302,15 @@ namespace Nami {
 		if (qTarget->is_valid_target(q_parm::range))
 		{
 			//判断状态放Q
-			if (qTarget->has_buff_type(buff_type::Stun) |
-				qTarget->has_buff_type(buff_type::Taunt) |
+			if (qTarget->has_buff_type(buff_type::Stun) |//眩晕
+				qTarget->has_buff_type(buff_type::Taunt) |//嘲讽
 				qTarget->has_buff_type(buff_type::Shred) |
-				qTarget->has_buff_type(buff_type::Knockup) |
-				qTarget->has_buff_type(buff_type::Asleep) |
-				qTarget->has_buff_type(buff_type::Charm) |
+				qTarget->has_buff_type(buff_type::Snare) |//陷阱
+				qTarget->has_buff_type(buff_type::Knockup) |//击飞
+				qTarget->has_buff_type(buff_type::Asleep) |//睡眠
+				qTarget->has_buff_type(buff_type::Charm) |//魅惑
+				qTarget->has_buff_type(buff_type::Suppression) |//压制
+				qTarget->has_buff_type(buff_type::Polymorph) | //变形
 				qTarget->has_buff(buff_hash("CaitlynR")) |
 				qTarget->has_buff(buff_hash("NunuR")) |
 				qTarget->has_buff(buff_hash("XerathR")) |
@@ -840,7 +840,5 @@ namespace Nami {
 		event_handler<events::on_do_cast>::remove_handler(on_do_cast);
 		event_handler<events::on_new_path>::remove_handler(on_new_path);
 		event_handler<events::on_process_spell_cast>::remove_handler(on_process_spell_cast);
-	
-
 	}
 }
