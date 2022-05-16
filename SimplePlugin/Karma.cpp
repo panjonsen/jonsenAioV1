@@ -1,8 +1,8 @@
-﻿#include "Lux.h"
+﻿#include "Karma.h"
 #include "../plugin_sdk/plugin_sdk.hpp"
 #include "fekapepatu.h"
 
-namespace Lux {
+namespace Karma {
 
 	namespace e_settings {
 		TreeEntry* e_use = nullptr;

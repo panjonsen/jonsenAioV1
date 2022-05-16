@@ -166,7 +166,7 @@
     <ClCompile Include="..\plugin_sdk\clipper.cpp" />
     <ClCompile Include="..\plugin_sdk\plugin_sdk.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Lux.cpp" />
+    <ClCompile Include="Karma.cpp" />
     <ClCompile Include="Nami.cpp" />
     <ClCompile Include="Permashow.cpp" />
   </ItemGroup>
@@ -175,7 +175,7 @@
     <ClInclude Include="..\plugin_sdk\cpplinq.h" />
     <ClInclude Include="..\plugin_sdk\plugin_sdk.hpp" />
     <ClInclude Include="fekapepatu.h" />
-    <ClInclude Include="Lux.h" />
+    <ClInclude Include="Karma.h" />
     <ClInclude Include="Nami.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -25,7 +25,7 @@
     <ClCompile Include="Permashow.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="Lux.cpp">
+    <ClCompile Include="Karma.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -45,7 +45,7 @@
     <ClInclude Include="fekapepatu.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Lux.h">
+    <ClInclude Include="Karma.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
