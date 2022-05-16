@@ -2,8 +2,8 @@
 #include "Nami.h"
 #include "Lux.h"
 PLUGIN_NAME("JonSenAio");
-//SUPPORTED_CHAMPIONS(champion_id::Nami,champion_id::Lux);
-
+SUPPORTED_CHAMPIONS(champion_id::Nami,champion_id::Karma);
+PLUGIN_TYPE(plugin_type::champion);
 PLUGIN_API bool on_sdk_load(plugin_sdk_core* plugin_sdk_good)
 {
 	DECLARE_GLOBALS(plugin_sdk_good);

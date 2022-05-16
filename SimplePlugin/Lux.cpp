@@ -14,7 +14,7 @@ namespace Lux {
 	{
 		console->print("-------------");
 		console->print(sender->get_name_cstr());
-
+	
 		//Lux_Skin05_E_tar_aoe_green 光辉E技能范围
 		// 
 		
@@ -84,11 +84,11 @@ namespace Lux {
 
 
 		e->add_separator("e.e1", "保护模式一(可能受到伤害使用E)");
-			//伤害阈值开关
+
 		e_settings::e_one_yuzhi_checkbox= e->add_checkbox("e.one.yuzhi", "~E伤害阈值检查开关", true);
-			//阈值条
+	
 			e_settings::e_one_yuzhi_slide= e->add_slider("e.one.yuzhi.slide", "~伤害大于 X 则使用E", 100,1,1000);
-			//条件护盾  开启后 受到伤害保护撤销
+		
 			e_settings::e_one_use_kull= e->add_checkbox("e.one.kill", "可能会死使用E", true);
 
 
