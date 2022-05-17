@@ -11,6 +11,11 @@ namespace Karma {
 		TreeEntry* q_use_combo_xiaobing_rq = nullptr;
 		TreeEntry* q_use_combo_xiaobing_range = nullptr;
 		TreeEntry* q_use_range = nullptr;
+
+		TreeEntry* q_use_has = nullptr;
+		TreeEntry* q_use_has_rq = nullptr;
+		TreeEntry* q_use_has_xiaobing = nullptr;
+		TreeEntry* q_use_has_xiaobing_rq = nullptr;
 	}
 	namespace e_settings {
 		TreeEntry* e_mode = nullptr;
@@ -177,6 +182,7 @@ namespace Karma {
 			{
 				//Q目标选择器
 				auto qTarget = target_selector->get_target(q_settings::q_use_range->get_int(), damage_type::magical);
+
 				if (myhero->get_position().distance(qTarget) <= q_parm::range)
 				{
 					auto pred = spell_setting::q->get_prediction(qTarget);
@@ -200,12 +206,67 @@ namespace Karma {
 						{
 							for (auto&& enemy : entitylist->get_enemy_heroes())
 							{
+								//orbwalker->move_to(enemy->get_position());
 								if (enemy->get_position().distance(enemymin) <= 200)
 								{
 									auto predmin = spell_setting::q->get_prediction(enemymin);
 									if (predmin.hitchance >= hit_chance::high)
 									{
 										if (q_settings::q_use_combo_xiaobing_rq->get_bool())
+										{
+											if (SpellState(spellslot::r) == spell_state::Ready)
+											{
+												spell_setting::r->cast();
+											}
+										}
+										spell_setting::q->cast(enemymin->get_position());
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	void use_has_q() {
+		if (q_settings::q_use_has->get_bool())
+		{
+			if (SpellState(spellslot::q) == spell_state::Ready)
+			{
+				//Q目标选择器
+				auto qTarget = target_selector->get_target(q_settings::q_use_range->get_int(), damage_type::magical);
+
+				if (myhero->get_position().distance(qTarget) <= q_parm::range)
+				{
+					auto pred = spell_setting::q->get_prediction(qTarget);
+					if (pred.hitchance >= hit_chance::high)
+					{
+						if (q_settings::q_use_has_rq->get_bool() && SpellState(spellslot::r) == spell_state::Ready)
+						{
+							spell_setting::r->cast();
+						}
+						spell_setting::q->cast(qTarget);
+						return;
+					}
+				}
+
+				//小兵溅射Q逻辑
+				if (q_settings::q_use_has_xiaobing->get_bool())
+				{
+					for (auto&& enemymin : entitylist->get_enemy_minions())
+					{
+						if (myhero->get_position().distance(enemymin->get_position()) <= q_settings::q_use_range->get_int())
+						{
+							for (auto&& enemy : entitylist->get_enemy_heroes())
+							{
+								//orbwalker->move_to(enemy->get_position());
+								if (enemy->get_position().distance(enemymin) <= 200)
+								{
+									auto predmin = spell_setting::q->get_prediction(enemymin);
+									if (predmin.hitchance >= hit_chance::high)
+									{
+										if (q_settings::q_use_has_xiaobing_rq->get_bool())
 										{
 											if (SpellState(spellslot::r) == spell_state::Ready)
 											{
@@ -307,7 +368,9 @@ namespace Karma {
 		use_q();
 		use_w();
 	}
-
+	void has() {
+		use_has_q();
+	}
 	void on_update() {
 		if (myhero->is_dead())
 		{
@@ -322,6 +385,10 @@ namespace Karma {
 		{
 			combo();
 		}
+		if (orbwalker->harass())
+		{
+			has();
+		}
 		/*	for (auto&& enemy : entitylist->get_enemy_heroes()) {
 			}*/
 			/*float damage = health_prediction->get_incoming_damage(myhero, 0.2f, true);
@@ -335,9 +402,7 @@ namespace Karma {
 		if (draw_settings::q_xiaobing->get_bool())
 		{
 			for (auto&& enemymin : entitylist->get_enemy_minions()) {
-			
-					draw_manager->add_circle(enemymin->get_position(), q_settings::q_use_combo_xiaobing_range->get_int(), draw_settings::q_xiaobing_color->get_color(), 2);
-			
+				draw_manager->add_circle(enemymin->get_position(), q_settings::q_use_combo_xiaobing_range->get_int(), draw_settings::q_xiaobing_color->get_color(), 2);
 			}
 		}
 		if (draw_settings::q->get_bool())
@@ -366,8 +431,8 @@ namespace Karma {
 			{translation_hash("Splash to enemies through minions Range"), L"小兵溅射范围"},
 			{translation_hash("Combo Q"), L"连招 Q"},
 			{translation_hash("~Combo Use R"), L"~连招加持 R"},
-			{translation_hash("~Splash to enemies through minions"), L"通过小兵溅射 Q"},
-			{translation_hash("~Splash to enemies through minions Use R"), L"通过小兵溅射 加持R"},
+			{translation_hash("~Splash to enemies through minions"), L"~通过小兵溅射 Q"},
+			{translation_hash("~Splash to enemies through minions Use R"), L"~通过小兵溅射 加持R"},
 			{translation_hash("W Settings"), L"W 配置"},
 			{translation_hash("W Use Range"), L"W 使用范围"},
 			{translation_hash("W Auto Anti-approach Range"), L"W 自动防近战靠近范围"},
@@ -398,8 +463,10 @@ namespace Karma {
 			{translation_hash("W Anti-approach Color"), L"W 防近战靠近线圈颜色"},
 			{translation_hash("E Draw"), L"E 线圈"},
 			{translation_hash("E Color"), L"E线圈颜色"},
-				{translation_hash("Two(Developing)"), L"保护模式二(开发中)"},
-					{translation_hash("whitelist"), L"白名单"}
+			{translation_hash("Two(Developing)"), L"保护模式二(开发中)"},
+			{translation_hash("whitelist"), L"白名单"},
+			{translation_hash("Harass Q"), L"骚扰 Q"},
+			{translation_hash("~Harass Use R"), L"~骚扰加持 R"}
 			});
 	}
 
@@ -419,11 +486,18 @@ namespace Karma {
 		auto q = main_tab->add_tab("q", "Q Settings"); {
 			q_settings::q_use_range = q->add_slider("q.use.range", "Q Use Range", q_parm::range, 1, q_parm::range);
 			q_settings::q_use_combo_xiaobing_range = q->add_slider("q.use.combo.xiaobing.range", "Splash to enemies through minions Range", 200, 1, 280);
-
+			q->add_separator("q.a1", "Combo");
 			q_settings::q_use_combo = q->add_checkbox("q.use.combo", "Combo Q", true);
 			q_settings::q_use_combo_rq = q->add_checkbox("q.use.combo.rq", "~Combo Use R", true);
 			q_settings::q_use_combo_xiaobing = q->add_checkbox("q.use.combo.xiaobing", "~Splash to enemies through minions", true);
 			q_settings::q_use_combo_xiaobing_rq = q->add_checkbox("q.use.combo.xiaobing.rq", "~Splash to enemies through minions Use R", true);
+
+			q->add_separator("q.a2", "Harass");
+
+			q_settings::q_use_has = q->add_checkbox("q.use.has", "Harass Q", true);
+			q_settings::q_use_has_rq = q->add_checkbox("q.use.has.rq", "~Harass Use R", true);
+			q_settings::q_use_has_xiaobing = q->add_checkbox("q.use.has.xiaobing", "~Splash to enemies through minions", true);
+			q_settings::q_use_has_xiaobing_rq = q->add_checkbox("q.use.has.xiaobing.rq", "~Splash to enemies through minions Use R", true);
 		}
 		q->set_assigned_texture(myhero->get_spell(spellslot::q)->get_icon_texture());
 
