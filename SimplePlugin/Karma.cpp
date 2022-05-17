@@ -150,7 +150,20 @@ namespace Karma {
 					spell_setting::e->cast(ally);
 					return;
 				}
+
 				
+				for (auto&& buff : ally->get_bufflist())
+				{
+					if (buff->is_valid() && buff->is_alive())
+					{
+						if (buff->get_type()==buff_type::Poison)
+						{
+							spell_setting::e->cast(ally);
+							return;
+						}
+					}
+				}
+		
 
 				//当前血量
 				float hp = ally->get_health();
