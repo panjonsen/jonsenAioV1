@@ -462,13 +462,20 @@ namespace Nami {
 			{
 				if (spell_setting::e->is_ready() && spell->get_last_target_id() > 0 && e_settings::e_ally_list[sender]->get_bool())
 				{
-					//获取攻击目标是不是冠军
-					//auto target_id = spell->get_last_target_id();
+					auto tagId = spell->get_last_target_id();
 
-					if (spell->get_spell_data()->get_name().find("Attack") != std::string::npos)
+					if (auto target = entitylist->get_object(tagId))
 					{
-						spell_setting::e->cast(sender);
-						console->print("yes find Attack");
+						if (target->is_ai_hero()) {
+							//获取攻击目标是不是冠军
+							//auto target_id = spell->get_last_target_id();
+
+							if (spell->get_spell_data()->get_name().find("Attack") != std::string::npos)
+							{
+								spell_setting::e->cast(sender);
+								console->print("yes find Attack");
+							}
+						}
 					}
 				}
 			}
@@ -661,7 +668,7 @@ namespace Nami {
 			//使用Q选择框
 			q_settings::q_use = q->add_checkbox("q.use", "Q Use", true);
 			//连招情况下,目标被减速Q
-			q_settings::q_slow = q->add_checkbox("q_slow", "Q Only Target Is Slow Use", true);
+			q_settings::q_slow = q->add_checkbox("q_slow", "Q Only Target Is Slow Use", false);
 
 			q->add_separator("q.a2", "Auto");
 			//连招情况下,目标不可移动Q
@@ -701,7 +708,7 @@ namespace Nami {
 
 				w_settings::w_ally_list[ally]->set_texture(ally->get_square_icon_portrait());
 				w_settings::w_ally_slider_list[ally] = w->add_slider("w.ally.lv." + ally->get_base_skin_name(), ally->get_base_skin_name() + "=" + ally->get_name() + " 优先级(Priority Level)", 1, 1, 5);
-				int hp = 50;
+				int hp = 100;
 				//AD默认百分之90血量使用
 				if (ally->get_champion() == champion_id::Ezreal |
 					ally->get_champion() == champion_id::Ashe |
@@ -726,9 +733,9 @@ namespace Nami {
 					ally->get_champion() == champion_id::Xayah |
 					ally->get_champion() == champion_id::Zeri)
 				{
-					hp = 90;
+					hp = 100;
 				}
-				w_settings::w_ally_hp_list[ally] = w->add_slider("w.ally.hp." + ally->get_base_skin_name(), ally->get_base_skin_name() + "=" + ally->get_name() + " Hp%", 1, hp, 100);
+				w_settings::w_ally_hp_list[ally] = w->add_slider("w.ally.hp." + ally->get_base_skin_name(), ally->get_base_skin_name() + "=" + ally->get_name() + " Hp%", hp, 1, 100);
 			}
 
 			w->add_separator("q.w2", "Enemy -> Ally : Enemy blacklist");

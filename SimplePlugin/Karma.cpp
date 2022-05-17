@@ -151,19 +151,17 @@ namespace Karma {
 					return;
 				}
 
-				
 				for (auto&& buff : ally->get_bufflist())
 				{
 					if (buff->is_valid() && buff->is_alive())
 					{
-						if (buff->get_type()==buff_type::Poison)
+						if (buff->get_type() == buff_type::Poison)
 						{
 							spell_setting::e->cast(ally);
 							return;
 						}
 					}
 				}
-		
 
 				//当前血量
 				float hp = ally->get_health();
@@ -394,6 +392,7 @@ namespace Karma {
 		{
 			return;
 		}
+
 		auto_w();
 		if (e_settings::e_mode->get_int() == 1)
 		{
@@ -487,9 +486,84 @@ namespace Karma {
 			{translation_hash("~Harass Use R"), L"~骚扰加持 R"}
 			});
 	}
+	void test() {
+		auto spellLevelR = spell_setting::r->level();
+
+		console->print("R Level:");
+		console->print("%i", spellLevelR);
+
+		//法术穿透
+		auto fachuan = myhero->mPercentBonusMagicPenetration();
+
+		console->print("法术穿透");
+		console->print("%f", fachuan);
+
+		//自身攻速加成
+		auto gongsujiacheng = myhero->mAttackSpeedMod();
+		console->print("攻速");
+		console->print("%f", gongsujiacheng);
+
+		console->print("攻速 非百分比模式");
+		console->print("%f", myhero->mPercentAttackSpeedMod());
+
+		//魔法穿透数值 非百分比
+		console->print("魔法穿透");
+		console->print("%f", myhero->get_flat_magic_penetration());
+
+		//魔法穿透百分比  得到不是直接的穿透百分比 而是 减去自身穿透的值 比如自身有45%的穿透 那么得到 55% 需要减一下
+		console->print("魔法穿透");
+		console->print("%f", myhero->get_percent_magic_penetration());
+
+		console->print("法术强度");
+		console->print("%f", myhero->get_flat_magic_damage_mod());
+
+		console->print("法术防御");
+		console->print("%f", myhero->get_magic_lathality());
+		console->print("%f", myhero->get_magical_shield());
+		console->print("%f", myhero->get_percent_magic_damage_mod());
+		console->print("%f", myhero->get_percent_magic_penetration());
+		console->print("%f", myhero->get_percent_magic_reduction());
+		console->print("%f", myhero->mPercentBonusMagicPenetration());
+
+		console->print("%f", myhero->get_spell_block());
+		//console->print("%f", myhero->spell());
+	}
+
+	//计算RQ的伤害值
+	void CalcRQSpellDamage() {
+		//法穿数值
+		auto	magic_fc = myhero->get_flat_magic_penetration();
+
+		//法穿百分比
+		auto magic_fc_percent = myhero->get_percent_magic_penetration();
+
+		//法强
+		auto fq = myhero->get_flat_magic_damage_mod();
+
+		int  ewDamage = 0;
+		switch (spell_setting::r->level())
+		{
+		case  1:ewDamage = 40;
+			break;
+		case 2:ewDamage = 100;
+			break;
+		case 3:ewDamage = 160;
+			break;
+		case 4:ewDamage = 220;
+			break;
+		default:
+			break;
+		}
+		//RQ的伤害
+		auto fqjc = (fq * 0.3) + ewDamage;
+
+		/*for (auto&& enemy : entitylist->get_enemy_heroes()) {
+		}*/
+	}
 
 	void load() {
 		EndlishToChinaese();
+
 		spell_setting::q = plugin_sdk->register_spell(spellslot::q, q_parm::range);
 		spell_setting::w = plugin_sdk->register_spell(spellslot::w, w_parm::range);
 		spell_setting::e = plugin_sdk->register_spell(spellslot::e, e_parm::range);
@@ -583,8 +657,21 @@ namespace Karma {
 		//event_handler<events::on_create_object>::add_callback(on_create_object);
 		event_handler<events::on_update>::add_callback(on_update);
 		event_handler<events::on_draw>::add_callback(on_draw);
+
+		test();
 	}
 
 	void unload() {
+
+		menu->delete_tab(main_tab);
+
+		plugin_sdk->remove_spell(spell_setting::q);
+		plugin_sdk->remove_spell(spell_setting::w);
+		plugin_sdk->remove_spell(spell_setting::e);
+		plugin_sdk->remove_spell(spell_setting::r);
+
+		event_handler<events::on_update>::remove_handler(on_update);
+		event_handler<events::on_draw>::remove_handler(on_draw);
+
 	}
 }

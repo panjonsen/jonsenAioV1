@@ -28,6 +28,9 @@
     <ClCompile Include="Karma.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="Gangplank.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\plugin_sdk\cpplinq.h">
@@ -46,6 +49,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="Karma.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Gangplank.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

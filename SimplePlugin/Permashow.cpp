@@ -8,14 +8,12 @@ TreeEntry* permashow_fontsize;
 TreeEntry* permashow_pos_x;
 TreeEntry* permashow_pos_y;
 
-
 TreeEntry* background_color;
 TreeEntry* border_color;
 TreeEntry* separator_color;
 TreeEntry* title_color;
 TreeEntry* title_background_color;
 TreeEntry* text_color;
-
 
 const std::int32_t padding_x = 14;
 const std::int32_t padding_y = 14;
