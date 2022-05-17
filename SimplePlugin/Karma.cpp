@@ -144,6 +144,14 @@ namespace Karma {
 				{
 					continue;
 				}
+
+				if (ally->has_buff(buff_hash("SummonerDot")))
+				{
+					spell_setting::e->cast(ally);
+					return;
+				}
+				
+
 				//当前血量
 				float hp = ally->get_health();
 				//可能收到的伤害
@@ -322,19 +330,16 @@ namespace Karma {
 	}
 
 	void auto_w() {
-		/*for (auto&& enemy : entitylist->get_enemy_heroes()) {
-			for (auto&& buff : enemy->get_bufflist())
-			{
-				if (buff->is_valid())
-				{
-					if (buff->get_type()==buff_type::st)
-					{
-						console->print("---------------1");
-						console->print(buff->get_name_cstr());
-					}
-				}
-			}
-		}*/
+		//for (auto&& enemy : entitylist->get_enemy_heroes()) {
+		//	console->print("---------------");
+		//	for (auto&& buff : enemy->get_bufflist())
+		//	{
+		//		if (buff->is_valid()&& buff->is_alive())
+		//		{
+		//			console->print(buff->get_name_cstr());
+		//		}
+		//	}
+		//}
 
 		if (w_settings::w_use_combo_jinzhan->get_bool() | w_settings::w_auto_stun->get_bool())
 		{
