@@ -147,7 +147,7 @@ namespace Nami {
 			{
 				//预判
 				auto pred = spell_setting::q->get_prediction(qTarget);
-				if (pred.hitchance >= get_hitchance(spell_setting::q)) {
+				if (pred.hitchance >= get_hitchance(spell_setting::q) && myhero->get_position().distance(pred.get_cast_position())<= q_settings::q_use_range->get_int()) {
 					if (spell_setting::q->cast(pred.get_cast_position()))
 					{
 						return;
@@ -316,7 +316,10 @@ namespace Nami {
 				qTarget->has_buff(buff_hash("XerathR")) |
 				qTarget->has_buff(buff_hash("JannaR")) |
 				qTarget->has_buff(buff_hash("VelkozR")) |
-				qTarget->has_buff(buff_hash("SionQ"))
+				qTarget->has_buff(buff_hash("SionQ")) |
+				qTarget->has_buff(buff_hash("JhinW"))
+
+				
 
 				&& q_settings::q_stun->get_bool())
 			{
@@ -336,12 +339,32 @@ namespace Nami {
 			// }
 		}
 	}
+	//救命W
+	void auto_w() {
+	
+		if (spell_setting::w->is_ready())
+		{
+			for (auto&& ally : entitylist->get_ally_heroes())
+			{
 
+				if (myhero->get_position().distance(ally) <= w_parm::range && ally->get_health_percent() <= 20)
+				{
+					spell_setting::w->cast(ally);
+					return;
+
+				}
+
+			}
+		}
+	
+
+
+	}
 	void on_update() {
 		//人物死亡则不执行
 		if (myhero->is_dead())
 			return;
-
+		auto_w();
 		auto_q();
 		if (orbwalker->combo_mode())
 		{
@@ -458,7 +481,7 @@ namespace Nami {
 	void auto_e(game_object_script sender, spell_instance_script spell) {
 		if (sender->is_ai_hero() && sender->is_ally())
 		{
-			if (e_settings::e_use->get_bool())
+			if (e_settings::e_use->get_bool() && myhero->get_position().distance(sender)<= e_parm::range)
 			{
 				if (spell_setting::e->is_ready() && spell->get_last_target_id() > 0 && e_settings::e_ally_list[sender]->get_bool())
 				{
@@ -470,7 +493,7 @@ namespace Nami {
 							//获取攻击目标是不是冠军
 							//auto target_id = spell->get_last_target_id();
 
-							if (spell->get_spell_data()->get_name().find("Attack") != std::string::npos)
+							if (spell->get_spell_data()->get_name().find("Attack") != std::string::npos )
 							{
 								spell_setting::e->cast(sender);
 								console->print("yes find Attack");
@@ -736,6 +759,8 @@ namespace Nami {
 					hp = 100;
 				}
 				w_settings::w_ally_hp_list[ally] = w->add_slider("w.ally.hp." + ally->get_base_skin_name(), ally->get_base_skin_name() + "=" + ally->get_name() + " Hp%", hp, 1, 100);
+				w->add_separator("q.ww."+ ally->get_base_skin_name(), "-------------------");
+			
 			}
 
 			w->add_separator("q.w2", "Enemy -> Ally : Enemy blacklist");

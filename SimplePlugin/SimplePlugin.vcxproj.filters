@@ -31,6 +31,9 @@
     <ClCompile Include="Gangplank.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="Renata.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\plugin_sdk\cpplinq.h">
@@ -52,6 +55,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="Gangplank.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Renata.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

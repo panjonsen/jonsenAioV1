@@ -170,6 +170,7 @@
     <ClCompile Include="Karma.cpp" />
     <ClCompile Include="Nami.cpp" />
     <ClCompile Include="Permashow.cpp" />
+    <ClCompile Include="Renata.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\plugin_sdk\clipper.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Gangplank.h" />
     <ClInclude Include="Karma.h" />
     <ClInclude Include="Nami.h" />
+    <ClInclude Include="Renata.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

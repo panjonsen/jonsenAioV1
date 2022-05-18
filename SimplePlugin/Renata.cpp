@@ -1,9 +1,11 @@
-﻿#include "Gangplank.h"
-
+﻿
+#include "Renata.h"
 #include "../plugin_sdk/plugin_sdk.hpp"
 #include "fekapepatu.h"
 
-namespace Gangplank {
+
+
+namespace Renata {
 	namespace q_settings {
 		TreeEntry* q_use_combo = nullptr;
 		TreeEntry* q_use_combo_rq = nullptr;
@@ -86,97 +88,16 @@ namespace Gangplank {
 		TreeEntry* e = nullptr;
 		TreeEntry* e_color = nullptr;
 	}
-	spell_state SpellState(spellslot slot) {
-		return myhero->get_spell_state(slot);
-	}
 
-	void on_create_object(game_object_script sender)
-	{
-		console->print("-------------");
-		console->print(sender->get_name_cstr());
 
-		//Lux_Skin05_E_tar_aoe_green 光辉E技能范围
-		//
 
-		//火男W 2个其中一个
-		//Brand_Skin04_W_POF_charge
-		//Brand_Skin04_W_POF_tar_green
 
-		//泽拉斯
-		//Xerath_Skin03_W_aoe_green
-		//Xerath_Base_Q_aoe_reticle_green
-		//Xerath_Base_R_aoe_reticle_green
 
-		//if (sender->get_name() == "Lux_Skin05_E_tar_aoe_green")
-		//{
-		//	//判定处于技能范围
-		//	if (sender->get_position().distance(myhero->get_position()) <= 300)
-		//	{
-		//		console->print("处于技能范围");
-		//	}
-		//}
-	}
 
-	//判断在第一个桶附近已经有没有桶
-	game_object_script check_zhouwei_t(game_object_script t, int netword_id) {
-		game_object_script t2;
-		for (auto&& objec : entitylist->get_attackable_objects()) {
-			if (objec->get_name() == "Barrel" && objec->get_network_id() != netword_id) {
-				if (t->get_position().distance(objec) <= 360)
-				{
-					t2 = objec;
-					//youle = true;
-					break;
-				}
-			}
-		}
-
-		return t2;
-	}
-
-	void use_q() {
-		if (q_settings::q_use_combo->get_bool())
-		{
-			if (SpellState(spellslot::q) == spell_state::Ready)
-			{
-				auto Select_Target = target_selector->get_target(q_parm::range, damage_type::physical);
-
-				/*	if (Select_Target && myhero->get_position().distance(Select_Target)<= q_parm::range)
-					{
-						spell_setting::q->cast(Select_Target);
-
-						return;
-					}*/
-
-					
-				
-			}
-		}
-	}
 	void combo() {
-		use_q();
+		
 	}
 
-	void auto_attck_Barrel() {
-		for (auto&& objec : entitylist->get_attackable_objects()) {
-			if (objec->get_name() == "Barrel")
-			{
-				auto h = objec->get_health();
-				if (h == 3 | h == 2 && myhero->get_position().distance(objec) <= 220)
-				{
-					if (orbwalker->can_attack()) {
-						orbwalker->set_attack(false);
-						orbwalker->set_movement(false);
-						myhero->issue_order(objec, true, true);
-						orbwalker->set_attack(true);
-						orbwalker->set_movement(true);
-					}
-
-					return;
-				}
-			}
-		}
-	}
 	void on_update() {
 		if (myhero->is_dead())
 		{
@@ -251,80 +172,9 @@ namespace Gangplank {
 			{translation_hash("~Harass Use R"), L"~骚扰加持 R"}
 			});
 	}
-	void test() {
-		auto spellLevelR = spell_setting::r->level();
 
-		console->print("R Level:");
-		console->print("%i", spellLevelR);
 
-		//法术穿透
-		auto fachuan = myhero->mPercentBonusMagicPenetration();
 
-		console->print("法术穿透");
-		console->print("%f", fachuan);
-
-		//自身攻速加成
-		auto gongsujiacheng = myhero->mAttackSpeedMod();
-		console->print("攻速");
-		console->print("%f", gongsujiacheng);
-
-		console->print("攻速 非百分比模式");
-		console->print("%f", myhero->mPercentAttackSpeedMod());
-
-		//魔法穿透数值 非百分比
-		console->print("魔法穿透");
-		console->print("%f", myhero->get_flat_magic_penetration());
-
-		//魔法穿透百分比  得到不是直接的穿透百分比 而是 减去自身穿透的值 比如自身有45%的穿透 那么得到 55% 需要减一下
-		console->print("魔法穿透");
-		console->print("%f", myhero->get_percent_magic_penetration());
-
-		console->print("法术强度");
-		console->print("%f", myhero->get_flat_magic_damage_mod());
-
-		console->print("法术防御");
-		console->print("%f", myhero->get_magic_lathality());
-		console->print("%f", myhero->get_magical_shield());
-		console->print("%f", myhero->get_percent_magic_damage_mod());
-		console->print("%f", myhero->get_percent_magic_penetration());
-		console->print("%f", myhero->get_percent_magic_reduction());
-		console->print("%f", myhero->mPercentBonusMagicPenetration());
-
-		console->print("%f", myhero->get_spell_block());
-		//console->print("%f", myhero->spell());
-	}
-
-	//计算RQ的伤害值
-	void CalcRQSpellDamage() {
-		//法穿数值
-		auto	magic_fc = myhero->get_flat_magic_penetration();
-
-		//法穿百分比
-		auto magic_fc_percent = myhero->get_percent_magic_penetration();
-	
-		//法强
-	/*	auto fq = myhero->get_flat_magic_damage_moad();*/
-
-		int  ewDamage = 0;
-		switch (spell_setting::r->level())
-		{
-		case  1:ewDamage = 40;
-			break;
-		case 2:ewDamage = 100;
-			break;
-		case 3:ewDamage = 160;
-			break;
-		case 4:ewDamage = 220;
-			break;
-		default:
-			break;
-		}
-		//RQ的伤害
-	/*	auto fqjc = (fq * 0.3) + ewDamage;*/
-
-		/*for (auto&& enemy : entitylist->get_enemy_heroes()) {
-		}*/
-	}
 
 	void load() {
 		//EndlishToChinaese();
@@ -337,39 +187,7 @@ namespace Gangplank {
 		main_tab = menu->create_tab("aio.Gangplank", myhero->get_character_data()->get_base_skin_name());
 		main_tab->set_assigned_texture(myhero->get_square_icon_portrait());
 
-		auto q = main_tab->add_tab("q", "Q Settings"); {
-			q_settings::q_use_combo = q->add_checkbox("q.use.combo", "Combo Q", true);
-		}
-		q->set_assigned_texture(myhero->get_spell(spellslot::q)->get_icon_texture());
-
-		auto w = main_tab->add_tab("w", "W Settings"); {
-		}
-		w->set_assigned_texture(myhero->get_spell(spellslot::w)->get_icon_texture());
-
-		auto e = main_tab->add_tab("e", "E Settings");
-		{
-			e_settings::e_use_combo = e->add_checkbox("e.use.combo", "Combo E", true);
-		}
-		e->set_assigned_texture(myhero->get_spell(spellslot::e)->get_icon_texture());
-
-		auto draw = main_tab->add_tab("draw", "Draw");
-		{
-			float color[] = { 0.f, 1.f, 0.f, 1.f };
-			draw_settings::q = draw->add_checkbox("draw.q", "Q Draw", true);
-			draw_settings::q_color = draw->add_colorpick("draw.q.color", "Q Draw Color", color, true);
-
-			draw_settings::w = draw->add_checkbox("draw.w", "W Draw", true);
-			draw_settings::w_color = draw->add_colorpick("draw.w.color", "W Draw Color", color, true);
-
-			draw_settings::e = draw->add_checkbox("draw.e", "E Draw", true);
-			draw_settings::e_color = draw->add_colorpick("draw.e.color", "E Color", color, true);
-		}
-
-		event_handler<events::on_create_object>::add_callback(on_create_object);
-		event_handler<events::on_update>::add_callback(on_update);
-		event_handler<events::on_draw>::add_callback(on_draw);
-
-		//	test();
+		
 	}
 
 	void unload() {

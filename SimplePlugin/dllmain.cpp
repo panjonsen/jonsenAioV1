@@ -2,6 +2,7 @@
 #include "Nami.h"
 #include "Karma.h"
 #include "Gangplank.h"
+
 PLUGIN_NAME("JonSenAio");
 SUPPORTED_CHAMPIONS(champion_id::Nami, champion_id::Karma);
 PLUGIN_TYPE(plugin_type::champion);
@@ -19,6 +20,9 @@ PLUGIN_API bool on_sdk_load(plugin_sdk_core* plugin_sdk_good)
 		Karma::load();
 		return true;
 	//case champion_id::Gangplank:
+	//	Gangplank::load();
+	//	return true;
+	//case champion_id::Renata:
 	//	Gangplank::load();
 	//	return true;
 	default:
