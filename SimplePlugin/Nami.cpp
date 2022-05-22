@@ -730,7 +730,9 @@ namespace Nami {
 				w_settings::w_ally_list[ally] = w->add_checkbox("w.ally." + ally->get_base_skin_name(), ally->get_base_skin_name() + "=" + ally->get_name(), true);
 
 				w_settings::w_ally_list[ally]->set_texture(ally->get_square_icon_portrait());
-				w_settings::w_ally_slider_list[ally] = w->add_slider("w.ally.lv." + ally->get_base_skin_name(), ally->get_base_skin_name() + "=" + ally->get_name() + " 优先级(Priority Level)", 1, 1, 5);
+	
+			 int	level = 1;
+
 				int hp = 100;
 				//AD默认百分之90血量使用
 				if (ally->get_champion() == champion_id::Ezreal |
@@ -757,7 +759,10 @@ namespace Nami {
 					ally->get_champion() == champion_id::Zeri)
 				{
 					hp = 100;
+					level = 5;
 				}
+				w_settings::w_ally_slider_list[ally] = w->add_slider("w.ally.lv." + ally->get_base_skin_name(), ally->get_base_skin_name() + "=" + ally->get_name() + " 优先级(Priority Level)", level, 1, 5);
+
 				w_settings::w_ally_hp_list[ally] = w->add_slider("w.ally.hp." + ally->get_base_skin_name(), ally->get_base_skin_name() + "=" + ally->get_name() + " Hp%", hp, 1, 100);
 				w->add_separator("q.ww."+ ally->get_base_skin_name(), "-------------------");
 			
